@@ -1,0 +1,25 @@
+# Example PDA definition (skeleton format from assignment)
+# Q
+q0 q1 q2
+
+# Sigma
+a b
+
+# Gamma
+Z A
+
+# initial state
+q0
+
+# initial stack symbol
+Z
+
+# F (only for APf)
+q2
+
+# transitions (q1 a A1 q2 A)
+# q_from input stackTop q_to pushSeq
+q0 . Z q1 Z      # epsilon on input, stay Z
+q1 a Z q1 AZ     # read 'a', push 'A' onto stack top before Z
+q1 b A q1 .      # read 'b', pop 'A'
+q1 . Z q2 .      # epsilon: accept by final state with empty stack (for APf mode)
