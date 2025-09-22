@@ -1,8 +1,8 @@
 #pragma once
 
-#include "pda/Types.hpp"
-#include "pda/State.hpp"
-#include "pda/Transition.hpp"
+#include "Types.hpp"
+#include "State.hpp"
+#include "Transition.hpp"
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
