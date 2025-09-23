@@ -10,6 +10,6 @@
 
 int main(int argc, char** argv) {
     std::cout << "PDA Simulator (skeleton)\n";
-    std::cout << "Usage: ./pda <definition_file> [--trace] [--mode=APv|APf]" << std::endl;
+    std::cout << "Usage: ./bin/pda <definition_file> [--trace] [--mode=APv|APf]" << std::endl;
     return 0;
 }
