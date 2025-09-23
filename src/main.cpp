@@ -3,10 +3,10 @@
 #include <optional>
 #include <fstream>
 
-#include "pda/Types.hpp"
-#include "pda/Parser.hpp"
-#include "pda/PDA.hpp"
-#include "pda/TraceLogger.hpp"
+#include "Types.hpp"
+#include "Parser.hpp"
+#include "PDA.hpp"
+#include "TraceLogger.hpp"
 
 int main(int argc, char** argv) {
     std::cout << "PDA Simulator (skeleton)\n";
