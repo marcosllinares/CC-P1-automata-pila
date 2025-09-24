@@ -3,11 +3,12 @@
 #include <string>
 
 // Forward declarations
+// ? Es necesario
 class Transition;
 
 class State {
  public:
-  State(){}
+  State();
   State(std::string id) : id_(id){}
 
   std::string GetId() const { return id_; }
