@@ -9,7 +9,8 @@ public:
   Alphabet(std::string);
   int GetSize() { return alphabet_.size(); }
   Alphabet GetInstance() { return *this; }
-  std::unordered_set<char> GetSetChar() { return alphabet_; }
+  std::unordered_set<char> GetAlphabet() { return alphabet_; }
+  bool BelongsToAlphabet(char);
 
 private:
   std::unordered_set<char> alphabet_;

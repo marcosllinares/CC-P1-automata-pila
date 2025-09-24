@@ -9,7 +9,11 @@
 Alphabet::Alphabet(std::string word) {
   for (char c : word) {
     // Separados por un espacio
-    if (c != ' ') alphabet_.insert(c);
+    if (c != ' ')
+      alphabet_.insert(c);
   }
 }
 
+bool Alphabet::BelongsToAlphabet(char c) {
+  return alphabet_.find(c) != alphabet_.end();
+}
