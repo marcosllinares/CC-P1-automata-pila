@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Types.hpp"
 #include <iosfwd>
 #include <string>
 #include <vector>
 
-namespace pda {
 
 // Optional tracing facility to print each step of simulation.
 class TraceLogger {
@@ -27,4 +25,3 @@ private:
     bool enabled_{false};
 };
 
-} // namespace pda

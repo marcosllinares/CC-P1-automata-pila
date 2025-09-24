@@ -1,9 +1,6 @@
 #include <iostream>
-#include <string>
-#include <optional>
 #include <fstream>
 
-#include "Types.hpp"
 #include "Parser.hpp"
 #include "PDA.hpp"
 #include "TraceLogger.hpp"
