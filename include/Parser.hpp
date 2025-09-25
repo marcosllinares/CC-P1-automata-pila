@@ -1,6 +1,8 @@
 #pragma once
 
-#include <iosfwd>
+#include <string>
+#include <memory>
+#include <vector>
 
 class PDA;
 
@@ -8,6 +10,14 @@ class PDA;
 class Parser {
 public:
     Parser();
-
+    
+    // Parse a PDA from a file
+    std::unique_ptr<PDA> parseFromFile(const std::string& filename);
+    
+private:
+    // Helper methods
+    std::vector<std::string> split(const std::string& str, char delimiter);
+    std::string trim(const std::string& str);
+    bool isComment(const std::string& line);
 };
 
