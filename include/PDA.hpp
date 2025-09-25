@@ -3,13 +3,14 @@
 #include "Alphabet.hpp"
 #include "State.hpp"
 #include "Transition.hpp"
+#include "Symbol.hpp"
 #include <set>
 #include <string>
 #include <vector>
 
 enum class AcceptanceMode { EmptyStack, FinalState };
 
-const char BLANK = '.';
+const Symbol BLANK(".");
 
 // High-level PDA simulator interface
 class PDA {
@@ -45,8 +46,8 @@ private:
   std::set<State> states_{}; // Q
   Alphabet chainAlphabet_{};         // Σ
   Alphabet stackAlphabet_{};         // Γ
-  std::string initialState_{};
-  char initialStackSymbol_{};
+  Symbol initialState_{};
+  Symbol initialStackSymbol_{};
   std::set<State> finals_{};              // F
   std::vector<Transition> transitions_{}; // δ
 };
