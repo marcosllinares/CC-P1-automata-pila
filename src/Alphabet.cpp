@@ -16,6 +16,6 @@ Alphabet::Alphabet(std::string word) {
   }
 }
 
-bool Alphabet::BelongsToAlphabet(const Symbol& symbol) {
+bool Alphabet::BelongsToAlphabet(const Symbol& symbol) const {
   return alphabet_.find(symbol) != alphabet_.end();
 }

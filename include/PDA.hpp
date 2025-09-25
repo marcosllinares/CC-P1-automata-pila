@@ -19,24 +19,24 @@ public:
   PDA(const PDA &other);
 
   // Configuration setters (after parsing)
-  // void setAcceptanceMode(AcceptanceMode mode);
-  // void setAlphabet(const std::set<Symbol>& sigma);
-  // void setStackAlphabet(const std::set<Symbol>& gamma);
-  // void setStates(const std::set<StateId>& states);
-  // void setInitialState(const StateId& q0);
-  // void setInitialStackSymbol(Symbol Z0);
-  // void setFinalStates(const std::set<StateId>& finals);
-  // void addTransition(const Transition& t);
+  void setAcceptanceMode(AcceptanceMode mode);
+  void setChainAlphabet(const Alphabet& sigma);
+  void setStackAlphabet(const Alphabet& gamma);
+  void setStates(const std::set<State>& states);
+  void setInitialState(const Symbol& q0);
+  void setInitialStackSymbol(const Symbol& Z0);
+  void setFinalStates(const std::set<State>& finals);
+  void addTransition(const Transition& t);
 
   // Queries
-  // AcceptanceMode acceptanceMode() const noexcept;
-  // const std::set<Symbol>& alphabet() const noexcept;
-  // const std::set<Symbol>& stackAlphabet() const noexcept;
-  // const std::set<StateId>& states() const noexcept;
-  // const StateId& initialState() const noexcept;
-  // Symbol initialStackSymbol() const noexcept;
-  // const std::set<StateId>& finalStates() const noexcept;
-  // const std::vector<Transition>& transitions() const noexcept;
+  AcceptanceMode acceptanceMode() const noexcept;
+  const Alphabet& chainAlphabet() const noexcept;
+  const Alphabet& stackAlphabet() const noexcept;
+  const std::set<State>& states() const noexcept;
+  const Symbol& initialState() const noexcept;
+  const Symbol& initialStackSymbol() const noexcept;
+  const std::set<State>& finalStates() const noexcept;
+  const std::vector<Transition>& transitions() const noexcept;
 
   // Simulation (deferred)
   // bool accepts(const std::string& word) const;
