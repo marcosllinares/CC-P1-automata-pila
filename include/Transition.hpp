@@ -1,25 +1,34 @@
 #pragma once
 
 #include "State.hpp"
+#include "Symbol.hpp"
 #include <string>
+#include <vector>
 
 // Transition representation for PDA:
-// (q_from, input_symbol in Σ ∪ {ε}, stack_pop_symbol in Γ) -> (q_to, stack_push_symbol in Γ*)
+// (q_from, input_symbol in Σ ∪ {ε}, stack_pop_symbol in Γ) -> (q_to, stack_push_symbols in Γ*)
 class Transition {
 public:
   Transition();
-  Transition(std::string word);
-  Transition(State q_from, char input_symbol, char stack_pop_symbol, State q_to, char stack_push_symbol)
+  Transition(const State& q_from, const Symbol& input_symbol, const Symbol& stack_pop_symbol, 
+             const State& q_to, const std::vector<Symbol>& stack_push_symbols)
     : q_from_(q_from),
       input_symbol_(input_symbol),
       stack_pop_symbol_(stack_pop_symbol),
       q_to_(q_to),
-      stack_push_symbol_(stack_push_symbol) {}
+      stack_push_symbols_(stack_push_symbols) {}
+
+  // Getters
+  const State& getFromState() const { return q_from_; }
+  const Symbol& getInputSymbol() const { return input_symbol_; }
+  const Symbol& getStackPopSymbol() const { return stack_pop_symbol_; }
+  const State& getToState() const { return q_to_; }
+  const std::vector<Symbol>& getStackPushSymbols() const { return stack_push_symbols_; }
 
 private:
   State q_from_;
-  char input_symbol_;
-  char stack_pop_symbol_;
+  Symbol input_symbol_;
+  Symbol stack_pop_symbol_;
   State q_to_;
-  char stack_push_symbol_;
+  std::vector<Symbol> stack_push_symbols_; // Can push multiple symbols
 };
