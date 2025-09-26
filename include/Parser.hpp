@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <vector>
+#include "PDA.hpp"
 
 class PDA;
 
@@ -12,7 +12,7 @@ public:
     Parser();
     
     // Parse a PDA from a file
-    std::unique_ptr<PDA> parseFromFile(const std::string& filename);
+    PDA parseFromFile(const std::string& filename);
     
 private:
     // Helper methods

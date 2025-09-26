@@ -13,13 +13,13 @@
 
 Parser::Parser() {}
 
-std::unique_ptr<PDA> Parser::parseFromFile(const std::string& filename) {
+PDA Parser::parseFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Cannot open file: " + filename);
     }
     
-    auto pda = std::make_unique<PDA>();
+    PDA pda;
     std::string line;
     int lineNumber = 0;
     
@@ -45,33 +45,33 @@ std::unique_ptr<PDA> Parser::parseFromFile(const std::string& filename) {
         for (const auto& stateName : stateNames) {
             states.insert(State(Symbol(stateName)));
         }
-        pda->setStates(states);
+        pda.setStates(states);
         
         // Line 2: Input alphabet
         line = getNextDataLine();
         if (line.empty()) throw std::runtime_error("Missing input alphabet definition");
         
         Alphabet chainAlphabet(line);
-        pda->setChainAlphabet(chainAlphabet);
+        pda.setChainAlphabet(chainAlphabet);
         
         // Line 3: Stack alphabet
         line = getNextDataLine();
         if (line.empty()) throw std::runtime_error("Missing stack alphabet definition");
         
         Alphabet stackAlphabet(line);
-        pda->setStackAlphabet(stackAlphabet);
+        pda.setStackAlphabet(stackAlphabet);
         
         // Line 4: Initial state
         line = getNextDataLine();
         if (line.empty()) throw std::runtime_error("Missing initial state definition");
         
-        pda->setInitialState(Symbol(trim(line)));
+        pda.setInitialState(Symbol(trim(line)));
         
         // Line 5: Initial stack symbol
         line = getNextDataLine();
         if (line.empty()) throw std::runtime_error("Missing initial stack symbol definition");
         
-        pda->setInitialStackSymbol(Symbol(trim(line)));
+        pda.setInitialStackSymbol(Symbol(trim(line)));
         
         // Line 6: Final states
         line = getNextDataLine();
@@ -82,7 +82,7 @@ std::unique_ptr<PDA> Parser::parseFromFile(const std::string& filename) {
         for (const auto& stateName : finalStateNames) {
             finalStates.insert(State(Symbol(stateName)));
         }
-        pda->setFinalStates(finalStates);
+        pda.setFinalStates(finalStates);
         
         // Remaining lines: Transitions
         while ((line = getNextDataLine()) != "") {
@@ -106,11 +106,11 @@ std::unique_ptr<PDA> Parser::parseFromFile(const std::string& filename) {
             }
             
             Transition transition{fromState, inputSymbol, stackPopSymbol, toState, stackPushSymbols};
-            pda->addTransition(transition);
+            pda.addTransition(transition);
         }
         
         // Set acceptance mode to FinalState (APf format)
-        pda->setAcceptanceMode(AcceptanceMode::FinalState);
+        pda.setAcceptanceMode(AcceptanceMode::FinalState);
         
     } catch (const std::exception& e) {
         throw std::runtime_error("Parse error at line " + std::to_string(lineNumber) + ": " + e.what());
