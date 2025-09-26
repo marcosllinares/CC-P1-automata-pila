@@ -18,7 +18,7 @@ public:
   PDA();
   PDA(const PDA &other);
 
-  // Configuration setters (after parsing)
+  // Setters (after parsing)
   void setAcceptanceMode(AcceptanceMode mode);
   void setChainAlphabet(const Alphabet& sigma);
   void setStackAlphabet(const Alphabet& gamma);
@@ -28,7 +28,7 @@ public:
   void setFinalStates(const std::set<State>& finals);
   void addTransition(const Transition& t);
 
-  // Queries
+  // Getters
   AcceptanceMode acceptanceMode() const noexcept;
   const Alphabet& chainAlphabet() const noexcept;
   const Alphabet& stackAlphabet() const noexcept;
@@ -38,7 +38,7 @@ public:
   const std::set<State>& finalStates() const noexcept;
   const std::vector<Transition>& transitions() const noexcept;
 
-  // Simulation (deferred)
+  // Simulation
   // bool accepts(const std::string& word) const;
 
 private:
