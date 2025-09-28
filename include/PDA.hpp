@@ -43,9 +43,9 @@ public:
 
 private:
   AcceptanceMode mode_{AcceptanceMode::FinalState};
-  std::set<State> states_{}; // Q
-  Alphabet chainAlphabet_{};         // Σ
-  Alphabet stackAlphabet_{};         // Γ
+  std::set<State> states_{};              // Q
+  Alphabet chainAlphabet_{};              // Σ
+  Alphabet stackAlphabet_{};              // Γ
   Symbol initialState_{};
   Symbol initialStackSymbol_{};
   std::set<State> finals_{};              // F
