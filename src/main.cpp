@@ -6,7 +6,6 @@
 #include "../include/TraceLogger.hpp"
 
 void printPDAStatus(const PDA& pda, bool trace, std::string filename) {
-
   std::cout << "Successfully parsed PDA from file: " << filename << std::endl;
 
   // Display basic information about the parsed PDA
@@ -57,11 +56,13 @@ void printPDAStatus(const PDA& pda, bool trace, std::string filename) {
 int main(int argc, char **argv) {
   std::cout << "PDA Simulator\n";
 
+  // Usage ()
   if (argc < 2) {
     std::cout << "Usage: ./bin/pda <definition_file> [--trace] [--mode=APv|APf]"
               << std::endl;
     return 1;
   }
+
 
   std::string filename = argv[1];
   bool trace = false;
