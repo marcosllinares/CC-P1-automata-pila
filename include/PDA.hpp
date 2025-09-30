@@ -5,6 +5,7 @@
 #include "Symbol.hpp"
 #include "Transition.hpp"
 #include <set>
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -38,8 +39,9 @@ public:
   const std::set<State> &finalStates() const noexcept;
   const std::vector<Transition> &transitions() const noexcept;
 
+  std::vector<Transition> GetPosibleTransitions(State q_actual, Symbol input_actual, Symbol stack_pop_symbol_actual);
   // Simulation
-  // bool accepts(const std::string& word) const;
+  bool accepts_recursive(std::string input_string, int input_string_position, State actual_state, std::stack<Symbol>);
 
 private:
   AcceptanceMode mode_{AcceptanceMode::FinalState};
