@@ -7,19 +7,17 @@
 class Transition;
 
 class State {
- public:
+public:
   State();
-  State(const Symbol& id) : id_(id){}
+  State(const Symbol &id) : id_(id) {}
 
   Symbol GetId() const { return id_; }
-  void SetId(const Symbol& id) { id_ = id; }
+  void SetId(const Symbol &id) { id_ = id; }
 
   // Comparison operators for std::set usage
-  bool operator<(const State& other) const { return id_ < other.id_; }
-  bool operator==(const State& other) const { return id_ == other.id_; }
+  bool operator<(const State &other) const { return id_ < other.id_; }
+  bool operator==(const State &other) const { return id_ == other.id_; }
 
- private:
+private:
   Symbol id_;
 };
-
-

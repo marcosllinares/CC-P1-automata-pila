@@ -5,7 +5,7 @@
 #include "../include/Parser.hpp"
 #include "../include/TraceLogger.hpp"
 
-void printPDAStatus(const PDA& pda, bool trace, std::string filename) {
+void printPDAStatus(const PDA &pda, bool trace, std::string filename) {
   std::cout << "Successfully parsed PDA from file: " << filename << std::endl;
 
   // Display basic information about the parsed PDA
@@ -63,7 +63,6 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-
   std::string filename = argv[1];
   bool trace = false;
   std::string mode = "APf"; // Default mode
@@ -91,4 +90,3 @@ int main(int argc, char **argv) {
     return 1;
   }
 }
-
