@@ -7,8 +7,7 @@ PDA::PDA(const PDA &other)
       initialState_(other.initialState_), initialStackSymbol_(other.initialStackSymbol_), finals_(other.finals_),
       transitions_(other.transitions_) {}
 
-std::vector<Transition> PDA::GetPosibleTransitions(State q_actual, Symbol string_input_symbol_actual,
-                                                   Symbol stack_pop_symbol_actual) {
+std::vector<Transition> PDA::GetPosibleTransitions(State q_actual, Symbol string_input_symbol_actual, Symbol stack_pop_symbol_actual) {
   std::vector<Transition> posible_transitions;
   for (int i = 0; i < transitions_.size(); i++) {
     if (q_actual == transitions_[i].getFromState() && stack_pop_symbol_actual == transitions_[i].getStackPopSymbol() &&
