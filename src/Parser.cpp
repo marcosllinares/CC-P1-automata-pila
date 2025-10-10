@@ -13,6 +13,26 @@
 
 Parser::Parser() {}
 
+/**
+ * @brief Parsea un archivo de definición de PDA y construye un objeto PDA
+ *
+ * El formato esperado del archivo es el siguiente (línea por línea, se
+ * permiten comentarios que comiencen con '#'):
+ * 1) Lista de estados (separados por espacios)
+ * 2) Alfabeto de entrada (símbolos separados por espacios)
+ * 3) Alfabeto de pila (símbolos separados por espacios)
+ * 4) Estado inicial
+ * 5) Símbolo inicial de la pila
+ * 6) Estados finales (separados por espacios)
+ * 7+) Transiciones, una por línea con el formato:
+ *    origen símbolo_entrada símbolo_a_desapilar destino símbolos_a_apilar
+ *
+ * Nota: Este método lanza std::runtime_error si encuentra errores de formato
+ * o si no puede abrir el archivo.
+ *
+ * @param filename Ruta al fichero de definición del autómata.
+ * @return PDA Objeto PDA construido a partir del fichero.
+ */
 PDA Parser::parseFromFile(const std::string &filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
@@ -128,6 +148,16 @@ PDA Parser::parseFromFile(const std::string &filename) {
   return pda;
 }
 
+/**
+ * @brief Divide una cadena en tokens separados por un delimitador
+ *
+ * Este método elimina espacios alrededor de cada token y descarta
+ * tokens vacíos resultantes.
+ *
+ * @param str Cadena a dividir
+ * @param delimiter Carácter delimitador
+ * @return std::vector<std::string> Vector con los tokens encontrados
+ */
 std::vector<std::string> Parser::split(const std::string &str, char delimiter) {
   std::vector<std::string> tokens;
   std::stringstream ss(str);
@@ -143,6 +173,12 @@ std::vector<std::string> Parser::split(const std::string &str, char delimiter) {
   return tokens;
 }
 
+/**
+ * @brief Elimina espacios en blanco al inicio y final de una cadena
+ *
+ * @param str Cadena a limpiar
+ * @return std::string Cadena recortada
+ */
 std::string Parser::trim(const std::string &str) {
   size_t start = str.find_first_not_of(" \t\r\n");
   if (start == std::string::npos)
@@ -152,6 +188,15 @@ std::string Parser::trim(const std::string &str) {
   return str.substr(start, end - start + 1);
 }
 
+/**
+ * @brief Comprueba si una línea es un comentario
+ *
+ * Una línea se considera comentario si está vacía o comienza por '#'.
+ *
+ * @param line Línea a comprobar
+ * @return true Si la línea es comentario
+ * @return false Si la línea no es comentario
+ */
 bool Parser::isComment(const std::string &line) {
   return line.empty() || line[0] == '#';
 }
