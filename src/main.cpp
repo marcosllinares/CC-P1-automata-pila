@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
   std::cout << "PDA Simulator\n";
 
   // Usage: require PDA definition and inputs file
-  if (argc < 3) {
+  if (argc < 3 || argc > 4) {
     std::cout << "Usage: ./bin/pda <definition_file> <inputs_file> [--trace]" << std::endl;
     return 1;
   }
@@ -57,26 +57,21 @@ int main(int argc, char **argv) {
   std::string filename = argv[1];
   std::string inputsFile = argv[2];
   bool trace = false;
-  std::string mode = "APf"; // Default mode
+  std::string mode = "APf"; // Default mode y único implementado
 
-  // Parse optional command line arguments after the two positional args
-  for (int i = 3; i < argc; i++) {
-    std::string arg = argv[i];
-    if (arg == "--trace") {
-      trace = true;
-    }
-    // else if (arg.substr(0, 7) == "--mode=") {
-    //   mode = arg.substr(7);
-    // }
+  // Parse optional flag for tracing
+  if (argc == 4 && argv[3] == "--trace") {
+    trace = true;
   }
+
 
   try {
     // Create parser and parse the PDA
     Parser parser;
     PDA pda = parser.parsePDAFromFile(filename);
 
-  // Parse input strings from the inputs file
-  std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
+    // Parse input strings from the inputs file
+    std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
 
     // Iterate over all input strings and run the existing logic per input
     for (const auto &input : inputs) {
@@ -84,6 +79,8 @@ int main(int argc, char **argv) {
       // Aquí mantenemos la lógica previa: mostrar información del PDA
       printPDAStatus(pda, trace, filename);
       // (En el futuro aquí se podría ejecutar la simulación/aceptación)
+
+      // Si trace es true, se podría inicializar TraceLogger y pasar a la simulación
     }
     return 0;
 
