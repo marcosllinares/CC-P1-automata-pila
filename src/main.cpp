@@ -64,20 +64,17 @@ int main(int argc, char **argv) {
     trace = true;
   }
 
-
   try {
-    // Create parser and parse the PDA
+    // Create parser and parse the PDA and inputs
     Parser parser;
     PDA pda = parser.parsePDAFromFile(filename);
-
-    // Parse input strings from the inputs file
     std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
+    //printPDAStatus(pda, trace, filename);
 
     // Iterate over all input strings and run the existing logic per input
     for (const auto &input : inputs) {
       std::cout << "\n--- Processing input: " << input << " ---" << std::endl;
       // Aquí mantenemos la lógica previa: mostrar información del PDA
-      printPDAStatus(pda, trace, filename);
       // (En el futuro aquí se podría ejecutar la simulación/aceptación)
 
       // Si trace es true, se podría inicializar TraceLogger y pasar a la simulación
