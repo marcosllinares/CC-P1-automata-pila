@@ -2,8 +2,7 @@
 
 #include <string>
 
-// Forward declarations
-// ? Es necesario
+// Declaraciones adelantadas
 class Transition;
 
 class State {
@@ -14,7 +13,7 @@ public:
   std::string GetId() const { return id_; }
   void SetId(const std::string &id) { id_ = id; }
 
-  // Comparison operators for std::set usage
+  // Operadores de comparación para uso en std::set
   bool operator<(const State &other) const { return id_ < other.id_; }
   bool operator==(const State &other) const { return id_ == other.id_; }
 

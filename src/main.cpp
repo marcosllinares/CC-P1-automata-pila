@@ -8,7 +8,7 @@
 void printPDAStatus(const PDA &pda, bool trace, std::string filename) {
   std::cout << "\nSuccessfully parsed PDA from file: " << filename << std::endl;
 
-  // Display basic information about the parsed PDA
+  // Mostrar información básica sobre el PDA analizado
   std::cout << "=== PDA Information ===" << std::endl;
   std::cout << "Acceptance Mode: " << (pda.acceptanceMode() == AcceptanceMode::FinalState ? "Final State" : "Empty Stack")
             << std::endl;
@@ -48,7 +48,7 @@ void printPDAStatus(const PDA &pda, bool trace, std::string filename) {
 int main(int argc, char **argv) {
   std::cout << "PDA Simulator\n";
 
-  // Usage: require PDA definition and inputs file
+  // Usage: requiere definición de PDA y archivo de entradas
   if (argc < 3 || argc > 4) {
     std::cout << "Usage: ./bin/pda <definition_file> <inputs_file> [--trace]" << std::endl;
     return 1;
@@ -57,21 +57,21 @@ int main(int argc, char **argv) {
   std::string filename = argv[1];
   std::string inputsFile = argv[2];
   bool trace = false;
-  std::string mode = "APf"; // Default mode y único implementado
+  std::string mode = "APf"; // Modo por defecto y único implementado
 
-  // Parse optional flag for tracing
+  // Analizar Flag opcional para trazado
   if (argc == 4 && argv[3] == "--trace") {
     trace = true;
   }
 
   try {
-    // Create parser and parse the PDA and inputs
+    // Parsear el PDA y las entradas
     Parser parser;
     PDA pda = parser.parsePDAFromFile(filename);
     std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
     //printPDAStatus(pda, trace, filename);
 
-    // Iterate over all input strings and run the existing logic per input
+    // Iterar sobre todas las cadenas de entrada y ejecutar la lógica existente por entrada
     for (const auto &input : inputs) {
       std::cout << "\n--- Processing input: " << input << " ---" << std::endl;
       // Aquí mantenemos la lógica previa: mostrar información del PDA

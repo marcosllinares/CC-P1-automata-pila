@@ -5,9 +5,8 @@
 #include <string>
 #include <vector>
 
-// Transition representation for PDA:
-// (q_from, input_symbol in Σ ∪ {ε}, stack_pop_symbol in Γ) -> (q_to,
-// stack_push_symbols in Γ*)
+// Representación de Transición para PDA:
+// (q_from, input_symbol in Σ ∪ {ε}, stack_pop_symbol in Γ) -> (q_to, stack_push_symbols in Γ*)
 class Transition {
 public:
   Transition();
@@ -32,5 +31,5 @@ private:
   Symbol input_symbol_;
   Symbol stack_pop_symbol_;
   State q_to_;
-  std::vector<Symbol> stack_push_symbols_; // Can push multiple symbols
+  std::vector<Symbol> stack_push_symbols_; // Puede insertar múltiples símbolos
 };

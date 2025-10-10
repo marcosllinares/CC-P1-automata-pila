@@ -13,7 +13,7 @@ enum class AcceptanceMode { EmptyStack, FinalState };
 
 const Symbol BLANK(".");
 
-// High-level PDA simulator interface
+// Interfaz de simulador de PDA de alto nivel
 class PDA {
 public:
   PDA();
@@ -40,7 +40,7 @@ public:
   const std::vector<Transition> &transitions() const noexcept;
 
   std::vector<Transition> GetPosibleTransitions(State q_actual, Symbol input_actual, Symbol stack_pop_symbol_actual);
-  // Simulation
+  // Simulacion
   bool accepts_recursive(std::string input_string, int input_string_position, State actual_state, std::stack<Symbol>);
 
 private:

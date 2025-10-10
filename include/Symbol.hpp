@@ -9,10 +9,10 @@ public:
   Symbol(char symbol);
   Symbol(const Symbol &other);
 
-  // Assignment operator
+  // Operador de asignación
   Symbol &operator=(const Symbol &other);
 
-  // Comparison operators for std::set usage
+  // Operadores de comparación para uso en std::set
   bool operator<(const Symbol &other) const;
   bool operator==(const Symbol &other) const;
   bool operator!=(const Symbol &other) const;
@@ -23,7 +23,7 @@ public:
   // Setters
   void setValue(const std::string &symbol);
 
-  // Conversion to string
+  // Conversión a string
   std::string toString() const;
 
 private:
