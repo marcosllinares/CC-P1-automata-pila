@@ -5,13 +5,13 @@
  * @brief Implementación mínima de la clase State
  *
  * Este archivo contiene la implementación del constructor por defecto de
- * `State`. El tipo `State` encapsula un identificador (`Symbol`) que
+ * `State`. El tipo `State` encapsula un identificador (`std::string`) que
  * representa el nombre del estado.
  */
 
 /**
  * @brief Constructor por defecto de State
  *
- * Inicializa el identificador del estado con un `Symbol` vacío.
+ * Inicializa el identificador del estado con una cadena vacía.
  */
-State::State() : id_(Symbol()) {}
+State::State() : id_(std::string()) {}

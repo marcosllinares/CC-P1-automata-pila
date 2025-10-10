@@ -19,7 +19,7 @@ void printPDAStatus(const PDA &pda, bool trace, std::string filename) {
 
   std::cout << "Final States: ";
   for (const auto &state : pda.finalStates()) {
-    std::cout << state.GetId().getValue() << " ";
+    std::cout << state.GetId() << " ";
   }
   std::cout << std::endl;
 
@@ -30,8 +30,8 @@ void printPDAStatus(const PDA &pda, bool trace, std::string filename) {
   if (trace) {
     std::cout << "\n=== Transitions ===" << std::endl;
     for (const auto &transition : pda.transitions()) {
-      std::cout << "(" << transition.getFromState().GetId().getValue() << ", " << transition.getInputSymbol().getValue() << ", "
-                << transition.getStackPopSymbol().getValue() << ") -> (" << transition.getToState().GetId().getValue() << ", ";
+  std::cout << "(" << transition.getFromState().GetId() << ", " << transition.getInputSymbol().getValue() << ", "
+        << transition.getStackPopSymbol().getValue() << ") -> (" << transition.getToState().GetId() << ", ";
 
       if (transition.getStackPushSymbols().empty()) {
         std::cout << ".";
