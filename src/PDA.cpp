@@ -1,4 +1,5 @@
 #include "../include/PDA.hpp"
+#include <exception>
 
 /**
  * @file PDA.cpp
@@ -163,3 +164,54 @@ const std::set<State> &PDA::finalStates() const noexcept { return finals_; }
 
 const std::vector<Transition> &PDA::transitions() const noexcept { return transitions_; }
 //@}
+
+// Valida que los atributos del autómata pertenezcan a los alfabetos/estados
+// Lanza std::runtime_error si encuentra alguna inconsistencia
+void PDA::validatePDA() const {
+  // initial state debe pertenecer a states_
+  if (states_.find(State(initialState_.toString())) == states_.end()) {
+    throw std::exception();
+  }
+
+  // initial stack symbol debe pertenecer al alfabeto de pila
+  if (!stackAlphabet_.BelongsToAlphabet(initialStackSymbol_)) {
+    throw std::exception();
+  }
+
+  // final states deben pertenecer a states_
+  for (const auto &fs : finals_) {
+    if (states_.find(fs) == states_.end()) {
+      throw std::exception();
+    }
+  }
+
+  // transiciones: comprobar estados y símbolos
+  for (const auto &t : transitions_) {
+    // estados origen y destino
+    if (states_.find(t.getFromState()) == states_.end()) {
+      throw std::exception();
+    }
+    if (states_.find(t.getToState()) == states_.end()) {
+      throw std::exception();
+    }
+
+    // símbolo de entrada: o está en el alfabeto de cadena o es BLANK
+    const Symbol &inSym = t.getInputSymbol();
+    if (!(inSym == BLANK) && !chainAlphabet_.BelongsToAlphabet(inSym)) {
+      throw std::exception();
+    }
+
+    // símbolo a desapilar debe estar en el alfabeto de pila
+    if (!stackAlphabet_.BelongsToAlphabet(t.getStackPopSymbol())) {
+      throw std::exception();
+    }
+
+    // símbolos a apilar deben pertenecer al alfabeto de pila (si no son BLANK)
+    for (const auto &s : t.getStackPushSymbols()) {
+      if (s == BLANK) continue;
+      if (!stackAlphabet_.BelongsToAlphabet(s)) {
+        throw std::exception();
+      }
+    }
+  }
+}

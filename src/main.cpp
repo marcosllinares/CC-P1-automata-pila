@@ -71,6 +71,8 @@ int main(int argc, char **argv) {
     std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
     //printPDAStatus(pda, trace, filename);
 
+    pda.validatePDA();
+
     // Iterar sobre todas las cadenas de entrada y ejecutar la lógica existente por entrada
     for (const auto &input : inputs) {
       std::cout << "\n--- Processing input: " << input << " ---" << std::endl;
