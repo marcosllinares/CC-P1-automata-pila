@@ -2,17 +2,22 @@
 
 #include "PDA.hpp"
 #include <string>
+#include <string>
 #include <vector>
 
 class PDA;
 
-// Parser for the provided input file format.
+// Parser for PDA files and input strings files.
 class Parser {
 public:
   Parser();
 
-  // Parse a PDA from a file
-  PDA parseFromFile(const std::string &filename);
+  // Parse a PDA from a definition file (antes parseFromFile)
+  PDA parsePDAFromFile(const std::string &filename);
+
+  // Parse input strings from a file: devuelve vector con cada línea
+  // no vacía y sin comentarios. Cada línea representa una cadena de entrada.
+  std::vector<std::string> parseInputFromFile(const std::string &filename);
 
 private:
   // Helper methods

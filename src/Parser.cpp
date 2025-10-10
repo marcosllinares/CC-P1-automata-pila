@@ -33,7 +33,7 @@ Parser::Parser() {}
  * @param filename Ruta al fichero de definición del autómata.
  * @return PDA Objeto PDA construido a partir del fichero.
  */
-PDA Parser::parseFromFile(const std::string &filename) {
+PDA Parser::parsePDAFromFile(const std::string &filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
     throw std::runtime_error("Cannot open file: " + filename);
@@ -162,7 +162,6 @@ std::vector<std::string> Parser::split(const std::string &str, char delimiter) {
   std::vector<std::string> tokens;
   std::stringstream ss(str);
   std::string token;
-
   while (std::getline(ss, token, delimiter)) {
     token = trim(token);
     if (!token.empty()) {
@@ -171,6 +170,29 @@ std::vector<std::string> Parser::split(const std::string &str, char delimiter) {
   }
 
   return tokens;
+}
+
+/**
+ * @brief Parsea un archivo con cadenas de entrada, una por línea.
+ *
+ * Ignora líneas vacías y comentarios que comiencen por '#'. Devuelve un
+ * vector con cada cadena (trimmed) lista para procesar por el PDA.
+ */
+std::vector<std::string> Parser::parseInputFromFile(const std::string &filename) {
+  std::ifstream file(filename);
+  if (!file.is_open()) {
+    throw std::runtime_error("Cannot open input file: " + filename);
+  }
+
+  std::vector<std::string> inputs;
+  std::string line;
+  while (std::getline(file, line)) {
+    line = trim(line);
+    if (line.empty() || isComment(line)) continue;
+    inputs.push_back(line);
+  }
+
+  return inputs;
 }
 
 /**
