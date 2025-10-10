@@ -46,6 +46,9 @@ public:
   std::vector<Transition> GetPosibleTransitions(State q_actual, Symbol input_actual, Symbol stack_pop_symbol_actual);
   // Simulacion
   bool accepts_recursive(std::string input_string, int input_string_position, State actual_state, std::stack<Symbol>);
+  // Control de seguridad: máximo número de iteraciones/llamadas recursivas
+  void setMaxIterations(int maxIter);
+  int maxIterations() const noexcept;
 
 private:
   AcceptanceMode mode_{AcceptanceMode::FinalState};
@@ -56,4 +59,8 @@ private:
   Symbol initialStackSymbol_{};
   std::set<State> finals_{};              // F
   std::vector<Transition> transitions_{}; // δ
+  int maxIterations_{100};
+  // Helper recursivo para simulación con control de iteraciones y detección de configuraciones repetidas
+  bool accepts_recursive_impl(const std::string &input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack,
+                             std::set<std::string> &visited, int &iterationsLeft);
 };

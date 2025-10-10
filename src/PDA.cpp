@@ -1,5 +1,6 @@
 #include "../include/PDA.hpp"
-#include <exception>
+#include <stdexcept>
+#include <sstream>
 
 /**
  * @file PDA.cpp
@@ -76,47 +77,80 @@ std::vector<Transition> PDA::GetPosibleTransitions(State q_actual, Symbol string
  * @return false En caso contrario
  */
 bool PDA::accepts_recursive(std::string input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack) {
-  // Caso base 1: Hemos procesado toda la cadena de entrada
-  if (position_input_string == input_string.length()) {
-    if (mode_ == AcceptanceMode::FinalState) {
-      return finals_.find(actual_state) != finals_.end();
-    }
-    // NO IMPLEMENTADO
-    // else { //AcceptanceMode::EmptyStack
-    // }
+  // Inicializar control de iteraciones y conjunto de configuraciones visitadas
+  std::set<std::string> visited;
+  int iterationsLeft = maxIterations_;
+  return accepts_recursive_impl(input_string, position_input_string, actual_state, actual_stack, visited, iterationsLeft);
+}
+
+// Helper recursivo con control de iteraciones y detección de configuraciones repetidas
+bool PDA::accepts_recursive_impl(const std::string &input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack,
+                                 std::set<std::string> &visited, int &iterationsLeft) {
+  // Control de iteraciones global
+  if (iterationsLeft <= 0) {
+    return false;
   }
-  // Caso base 2: Pila vacía (generalmente error)
+  --iterationsLeft;
+
+  // Serializar configuración (estado|posición|pila)
+  std::ostringstream oss;
+  oss << actual_state.GetId() << "|" << position_input_string << "|";
+  // Serializar pila desde el tope hacia abajo (top-first)
+  std::stack<Symbol> tmp = actual_stack;
+  while (!tmp.empty()) {
+    oss << tmp.top().toString();
+    tmp.pop();
+    if (!tmp.empty()) oss << ",";
+  }
+  std::string config = oss.str();
+
+  // Si ya visitamos esta configuración, evitar bucle infinito
+  if (visited.find(config) != visited.end()) {
+    return false;
+  }
+  visited.insert(config);
+
+  // Si hemos consumido toda la cadena, comprobamos aceptación por estado final
+  if (position_input_string >= (int)input_string.length()) {
+    if (mode_ == AcceptanceMode::FinalState && finals_.find(actual_state) != finals_.end()) {
+      return true;
+    }
+    // Nota: no retornamos inmediatamente si no estamos en estado final;
+    // debemos seguir explorando transiciones epsilon que podrían
+    // llevar a un estado final (epsilon-closure).
+  }
+
+  // Caso: pila vacía => no hay transiciones posibles que necesiten desapilar
   if (actual_stack.empty()) {
     return false;
   }
-  // Posible problema: Acceso fuera de rango
-  // Si position_input_string >= input_string.length()
-  Symbol actual_input_string_symbol = input_string[position_input_string];
+
+  // Símbolo de entrada actual: si estamos al final de la cadena usar BLANK
+  Symbol actual_input_string_symbol = (position_input_string >= (int)input_string.length()) ? BLANK
+                                                                                         : Symbol(input_string[position_input_string]);
   Symbol actual_top_stack_symbol = actual_stack.top();
-  // GetPosibleTransitions se debe encargar de epsilon transiciones
+
+  // Obtener transiciones aplicables (incluye transiciones epsilon)
   std::vector<Transition> actual_posible_transitions =
       GetPosibleTransitions(actual_state, actual_input_string_symbol, actual_top_stack_symbol);
-  for (auto transition : actual_posible_transitions) {
+
+  for (const auto &transition : actual_posible_transitions) {
     State new_state = transition.getToState();
     std::stack<Symbol> new_stack = actual_stack;
     new_stack.pop();
     std::vector<Symbol> symbols_to_stack = transition.getStackPushSymbols();
-    // Problema: Si symbols_to_stack está vacío, symbols_to_stack[0] causará crash.
-    if (symbols_to_stack[0] != BLANK) {
-      // Apila los símbolos en orden inverso
+    if (!symbols_to_stack.empty()) {
       for (auto it = symbols_to_stack.rbegin(); it != symbols_to_stack.rend(); ++it) {
         new_stack.push(*it);
       }
     }
-    // Determinar la nueva posición en la cadena de entrada
-    int new_position = (transition.getInputSymbol() == BLANK) ? 
-                    position_input_string : position_input_string + 1;
-    // Llamada recursiva
-    if (accepts_recursive(input_string, new_position, new_state, new_stack)) {
+
+    int new_position = (transition.getInputSymbol() == BLANK) ? position_input_string : position_input_string + 1;
+
+    if (accepts_recursive_impl(input_string, new_position, new_state, new_stack, visited, iterationsLeft)) {
       return true;
     }
-    // Si llegamos aquí, esta transición falló
-    // El bucle continúa con la siguiente transición
+    // Seguimos probando otras transiciones
   }
 
   return false;
@@ -165,23 +199,28 @@ const std::set<State> &PDA::finalStates() const noexcept { return finals_; }
 const std::vector<Transition> &PDA::transitions() const noexcept { return transitions_; }
 //@}
 
+// Control de seguridad: setters/getters para maxIterations_
+void PDA::setMaxIterations(int maxIter) { maxIterations_ = maxIter; }
+
+int PDA::maxIterations() const noexcept { return maxIterations_; }
+
 // Valida que los atributos del autómata pertenezcan a los alfabetos/estados
 // Lanza std::runtime_error si encuentra alguna inconsistencia
 void PDA::validatePDA() const {
   // initial state debe pertenecer a states_
   if (states_.find(State(initialState_.toString())) == states_.end()) {
-    throw std::exception();
+    throw std::runtime_error("Initial state '" + initialState_.toString() + "' is not declared in states");
   }
 
   // initial stack symbol debe pertenecer al alfabeto de pila
   if (!stackAlphabet_.BelongsToAlphabet(initialStackSymbol_)) {
-    throw std::exception();
+    throw std::runtime_error("Initial stack symbol '" + initialStackSymbol_.toString() + "' is not in the stack alphabet");
   }
 
   // final states deben pertenecer a states_
   for (const auto &fs : finals_) {
     if (states_.find(fs) == states_.end()) {
-      throw std::exception();
+      throw std::runtime_error("Final state '" + fs.GetId() + "' is not declared in states");
     }
   }
 
@@ -189,28 +228,28 @@ void PDA::validatePDA() const {
   for (const auto &t : transitions_) {
     // estados origen y destino
     if (states_.find(t.getFromState()) == states_.end()) {
-      throw std::exception();
+      throw std::runtime_error("Transition from-state '" + t.getFromState().GetId() + "' is not declared in states");
     }
     if (states_.find(t.getToState()) == states_.end()) {
-      throw std::exception();
+      throw std::runtime_error("Transition to-state '" + t.getToState().GetId() + "' is not declared in states");
     }
 
     // símbolo de entrada: o está en el alfabeto de cadena o es BLANK
     const Symbol &inSym = t.getInputSymbol();
     if (!(inSym == BLANK) && !chainAlphabet_.BelongsToAlphabet(inSym)) {
-      throw std::exception();
+      throw std::runtime_error("Transition input symbol '" + inSym.toString() + "' is not in the chain alphabet");
     }
 
     // símbolo a desapilar debe estar en el alfabeto de pila
     if (!stackAlphabet_.BelongsToAlphabet(t.getStackPopSymbol())) {
-      throw std::exception();
+      throw std::runtime_error("Transition stack-pop symbol '" + t.getStackPopSymbol().toString() + "' is not in the stack alphabet");
     }
 
     // símbolos a apilar deben pertenecer al alfabeto de pila (si no son BLANK)
     for (const auto &s : t.getStackPushSymbols()) {
       if (s == BLANK) continue;
       if (!stackAlphabet_.BelongsToAlphabet(s)) {
-        throw std::exception();
+        throw std::runtime_error("Transition stack-push symbol '" + s.toString() + "' is not in the stack alphabet");
       }
     }
   }

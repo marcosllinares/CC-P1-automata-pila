@@ -76,8 +76,15 @@ int main(int argc, char **argv) {
     // Iterar sobre todas las cadenas de entrada y ejecutar la lógica existente por entrada
     for (const auto &input : inputs) {
       std::cout << "\n--- Processing input: " << input << " ---" << std::endl;
-      // Aquí mantenemos la lógica previa: mostrar información del PDA
-      // (En el futuro aquí se podría ejecutar la simulación/aceptación)
+      // Preparar pila inicial
+      std::stack<Symbol> initial_stack;
+      initial_stack.push(pda.initialStackSymbol());
+
+      // Estado inicial
+      State init_state(pda.initialState().getValue());
+
+      bool accepted = pda.accepts_recursive(input, 0, init_state, initial_stack);
+      std::cout << "Result: " << (accepted ? "ACCEPTED" : "REJECTED") << std::endl;
 
       // Si trace es true, se podría inicializar TraceLogger y pasar a la simulación
     }
