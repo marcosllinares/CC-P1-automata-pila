@@ -56,25 +56,8 @@ rebuild: clean all
 # Run the program with example data
 run: $(TARGET)
 	@echo "Running PDA simulator..."
-	@echo "Usage: ./$(TARGET) <definition_file> [--trace] [--mode=APv|APf]"
+	@echo "Usage: ./$(TARGET) <definition_file> <input_file> [--trace]"
 	@echo "Example files available in data/ directory"
-
-# Test with example files
-test-apf: $(TARGET)
-	@echo "Testing with APf examples..."
-	@for file in data/APf/*.txt; do \
-		echo "Testing $$file"; \
-		./$(TARGET) "$$file" --mode=APf; \
-	done
-
-test-apv: $(TARGET)
-	@echo "Testing with APv examples..."
-	@for file in data/APv/*.txt; do \
-		echo "Testing $$file"; \
-		./$(TARGET) "$$file" --mode=APv; \
-	done
-
-test: test-apf test-apv
 
 # Install (copy to system location)
 install: $(TARGET)
@@ -89,9 +72,6 @@ help:
 	@echo "  clean    - Remove build artifacts"
 	@echo "  rebuild  - Clean and build"
 	@echo "  run      - Build and show usage information"
-	@echo "  test     - Run tests with example files"
-	@echo "  test-apf - Test with APf example files"
-	@echo "  test-apv - Test with APv example files"
 	@echo "  install  - Install to system"
 	@echo "  help     - Show this help"
 
