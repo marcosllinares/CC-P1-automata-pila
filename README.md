@@ -1,5 +1,5 @@
 # Práctica 01 - Autómata con pila
-Práctica que implementa un simulador básico de Autómata con Pila (PDA).
+Práctica que implementa un simulador básico de Autómata con Pila (PDA) con implementación por estados finales (APf). 
 
 ## Autor
 Trabajo realizado por Marcos Llinares Montes (alu0100972443)
@@ -19,10 +19,6 @@ Trabajo realizado por Marcos Llinares Montes (alu0100972443)
 │   │   ├── APf-1.txt
 │   │   ├── APf-2.txt
 │   │   └── APf-3.txt
-│   ├── APv
-│   │   ├── APv-1.txt
-│   │   ├── APv-2.txt
-│   │   └── APv-3.txt
 │   └── Inputs
 │       └── Input1.txt
 ├── include
@@ -60,7 +56,7 @@ Uso básico:
 ./bin/pda <definition_file> <inputs_file> [--trace]
 ```
 
-- `definition_file`: fichero con la definición del PDA (ej. `data/APf/APf-1.txt`).
+- `definition_file`: fichero con la definición del PDA (APf) (ej. `data/APf/APf-1.txt`).
 - `inputs_file`: fichero con cadenas de entrada, una por línea (ej. `data/Inputs/Input1.txt`).
 - `--trace` (opcional): muestra información de trazas / transiciones.
 
