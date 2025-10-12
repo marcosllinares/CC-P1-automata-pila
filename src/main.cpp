@@ -3,7 +3,6 @@
 
 #include "../include/PDA.hpp"
 #include "../include/Parser.hpp"
-#include "../include/TraceLogger.hpp"
 
 int main(int argc, char **argv) {
   std::cout << "PDA Simulator\n";
