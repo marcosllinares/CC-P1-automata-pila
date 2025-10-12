@@ -63,13 +63,6 @@ std::vector<Transition> PDA::GetPosibleTransitions(State q_actual, Symbol string
  * recursivamente. Si alguna rama conduce a una configuración de aceptación
  * devuelve true.
  *
- * NOTAS importantes (documentadas por el autor):
- * - `input_string` y `actual_stack` se reciben por valor y se copian en
- *   cada llamada recursiva (posible mejora: pasar `input_string` por
- *   referencia y copiar sólo la pila cuando sea necesario).
- * - El modo de aceptación por pila vacía no está implementado (solo
- *   AcceptanceMode::FinalState se maneja actualmente).
- *
  * @param input_string Cadena de entrada a procesar (se copia internamente)
  * @param position_input_string Índice de la posición actual en la cadena
  * @param actual_state Estado actual del autómata

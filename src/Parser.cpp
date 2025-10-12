@@ -118,10 +118,10 @@ PDA Parser::parsePDAFromFile(const std::string &filename) {
                                  std::to_string(lineNumber));
       }
 
-  State fromState{parts[0]};
+      State fromState{parts[0]};
       Symbol inputSymbol{parts[1]};
       Symbol stackPopSymbol{parts[2]};
-  State toState{parts[3]};
+      State toState{parts[3]};
 
       // Parse stack push symbols (can be multiple symbols or empty)
       std::vector<Symbol> stackPushSymbols;

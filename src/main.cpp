@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
       // Estado inicial
       State init_state(pda.initialState().getValue());
 
-     bool accepted = pda.accepts_recursive(input, 0, init_state, initial_stack, trace);
+      bool accepted = pda.accepts_recursive(input, 0, init_state, initial_stack, trace);
       std::cout << "Result: " << (accepted ? "ACCEPTED" : "REJECTED") << std::endl;
 
       // Si trace es true, se podría inicializar TraceLogger y pasar a la simulación
