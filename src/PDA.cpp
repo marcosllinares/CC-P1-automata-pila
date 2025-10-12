@@ -74,19 +74,20 @@ std::vector<Transition> PDA::GetPosibleTransitions(State q_actual, Symbol string
  * @param position_input_string Índice de la posición actual en la cadena
  * @param actual_state Estado actual del autómata
  * @param actual_stack Pila actual (se copia internamente)
+ * @param trace Si es true, imprime información de trazado
  * @return true Si la cadena es aceptada desde esta configuración
  * @return false En caso contrario
  */
-bool PDA::accepts_recursive(std::string input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack) {
+bool PDA::accepts_recursive(std::string input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack, bool trace) {
   // Inicializar control de iteraciones y conjunto de configuraciones visitadas
   std::set<std::string> visited;
   int iterationsLeft = maxIterations_;
-  return accepts_recursive_impl(input_string, position_input_string, actual_state, actual_stack, visited, iterationsLeft);
+  return accepts_recursive_impl(input_string, position_input_string, actual_state, actual_stack, visited, iterationsLeft, trace);
 }
 
 // Helper recursivo con control de iteraciones y detección de configuraciones repetidas
 bool PDA::accepts_recursive_impl(const std::string &input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack,
-                                 std::set<std::string> &visited, int &iterationsLeft) {
+                                 std::set<std::string> &visited, int &iterationsLeft, bool trace) {
   // Control de iteraciones global
   if (iterationsLeft <= 0) {
     return false;
@@ -148,7 +149,13 @@ bool PDA::accepts_recursive_impl(const std::string &input_string, int position_i
 
     int new_position = (transition.getInputSymbol() == BLANK) ? position_input_string : position_input_string + 1;
 
-    if (accepts_recursive_impl(input_string, new_position, new_state, new_stack, visited, iterationsLeft)) {
+    // Imprimir información de traza si está habilitada
+    if (trace) {
+      printTrace(actual_state, position_input_string, actual_input_string_symbol, 
+                 actual_top_stack_symbol, transition, new_stack);
+    }
+
+    if (accepts_recursive_impl(input_string, new_position, new_state, new_stack, visited, iterationsLeft, trace)) {
       return true;
     }
     // Seguimos probando otras transiciones
@@ -332,4 +339,49 @@ void PDA::printPDADefinition(bool trace, const std::string& filename) const {
       std::cout << ")" << std::endl;
     }
   }
+}
+
+/**
+ * @brief Imprime información de traza de una transición
+ * 
+ * Muestra el estado actual, la posición en la cadena, el símbolo de entrada,
+ * el tope de la pila, la transición aplicada y el estado de la pila después
+ * de aplicar la transición.
+ * 
+ * @param currentState Estado actual del autómata
+ * @param position Posición actual en la cadena de entrada
+ * @param inputSymbol Símbolo de entrada actual
+ * @param stackTop Símbolo del tope de la pila antes de la transición
+ * @param transition Transición que se está aplicando
+ * @param stackAfter Estado de la pila después de aplicar la transición
+ */
+void PDA::printTrace(const State& currentState, int position, const Symbol& inputSymbol, 
+                     const Symbol& stackTop, const Transition& transition, 
+                     const std::stack<Symbol>& stackAfter) const {
+  std::cout << "TRACE: Pos=" << position << " | (" << transition.getFromState().GetId() 
+            << ", " << transition.getInputSymbol().getValue() 
+            << ", " << transition.getStackPopSymbol().getValue() 
+            << ") -> (" << transition.getToState().GetId() << ", ";
+  
+  if (transition.getStackPushSymbols().empty()) {
+    std::cout << ".";
+  } else {
+    for (const auto &symbol : transition.getStackPushSymbols()) {
+      std::cout << symbol.getValue();
+    }
+  }
+  
+  std::cout << ") | Stack after: [";
+  std::stack<Symbol> tempStack = stackAfter;
+  std::vector<Symbol> stackContent;
+  while (!tempStack.empty()) {
+    stackContent.push_back(tempStack.top());
+    tempStack.pop();
+  }
+  
+  for (size_t i = 0; i < stackContent.size(); ++i) {
+    if (i > 0) std::cout << ", ";
+    std::cout << stackContent[i].getValue();
+  }
+  std::cout << "]" << std::endl;
 }

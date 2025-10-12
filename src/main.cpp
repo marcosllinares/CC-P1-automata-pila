@@ -29,9 +29,11 @@ int main(int argc, char **argv) {
     Parser parser;
     PDA pda = parser.parsePDAFromFile(filename);
     std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
-    pda.printPDADefinition(trace, filename);
-
     pda.validatePDA();
+    
+    if (trace) {
+      pda.printPDADefinition(true, filename);
+    }
 
     // Iterar sobre todas las cadenas de entrada y ejecutar la lógica existente por entrada
     for (const auto &input : inputs) {
@@ -39,11 +41,10 @@ int main(int argc, char **argv) {
       // Preparar pila inicial
       std::stack<Symbol> initial_stack;
       initial_stack.push(pda.initialStackSymbol());
-
       // Estado inicial
       State init_state(pda.initialState().getValue());
 
-      bool accepted = pda.accepts_recursive(input, 0, init_state, initial_stack);
+     bool accepted = pda.accepts_recursive(input, 0, init_state, initial_stack, trace);
       std::cout << "Result: " << (accepted ? "ACCEPTED" : "REJECTED") << std::endl;
 
       // Si trace es true, se podría inicializar TraceLogger y pasar a la simulación

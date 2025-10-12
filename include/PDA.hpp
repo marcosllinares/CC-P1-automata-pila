@@ -45,13 +45,18 @@ public:
 
   std::vector<Transition> GetPosibleTransitions(State q_actual, Symbol input_actual, Symbol stack_pop_symbol_actual);
   // Simulacion
-  bool accepts_recursive(std::string input_string, int input_string_position, State actual_state, std::stack<Symbol>);
+  bool accepts_recursive(std::string input_string, int input_string_position, State actual_state, std::stack<Symbol>, bool trace = false);
   // Control de seguridad: máximo número de iteraciones/llamadas recursivas
   void setMaxIterations(int maxIter);
   int maxIterations() const noexcept;
 
   // Imprime información detallada sobre la definición del PDA
   void printPDADefinition(bool trace = false, const std::string& filename = "") const;
+
+  // Imprime información de traza de una transición
+  void printTrace(const State& currentState, int position, const Symbol& inputSymbol, 
+                  const Symbol& stackTop, const Transition& transition, 
+                  const std::stack<Symbol>& stackAfter) const;
 
 private:
   AcceptanceMode mode_{AcceptanceMode::FinalState};
@@ -65,5 +70,5 @@ private:
   int maxIterations_{50};
   // Helper recursivo para simulación con control de iteraciones y detección de configuraciones repetidas
   bool accepts_recursive_impl(const std::string &input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack,
-                             std::set<std::string> &visited, int &iterationsLeft);
+                             std::set<std::string> &visited, int &iterationsLeft, bool trace = false);
 };
