@@ -59,7 +59,7 @@ private:
   Symbol initialStackSymbol_{};
   std::set<State> finals_{};              // F
   std::vector<Transition> transitions_{}; // δ
-  int maxIterations_{100};
+  int maxIterations_{50};
   // Helper recursivo para simulación con control de iteraciones y detección de configuraciones repetidas
   bool accepts_recursive_impl(const std::string &input_string, int position_input_string, State actual_state, std::stack<Symbol> actual_stack,
                              std::set<std::string> &visited, int &iterationsLeft);

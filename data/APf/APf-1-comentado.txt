@@ -1,0 +1,13 @@
+# Automata de Pila con estados finales para reconocer el lenguaje 
+#  L = {a^nb^n | n > 0}
+q1 q2 q3                  # Conjunto Q de estados
+a b                       # Conjunto Σ de alfabeto input_string
+S A                       # Conjunto Γ de alfabeto stack
+q1                        # Estado inicial
+S                         # Simbolo inicial de la pila
+q3                        # Conjunto F de estados finales
+q1 a S q1 AS              # Transiciones: q_from, input_string[i], top_stack, q_to, push_stack
+q1 a A q7 AA
+q1 b A q2 .
+q2 b A q2 .
+q2 . S q3 S
