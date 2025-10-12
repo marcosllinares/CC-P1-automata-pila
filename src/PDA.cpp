@@ -1,6 +1,7 @@
 #include "../include/PDA.hpp"
 #include <stdexcept>
 #include <sstream>
+#include <iostream>
 
 /**
  * @file PDA.cpp
@@ -251,6 +252,84 @@ void PDA::validatePDA() const {
       if (!stackAlphabet_.BelongsToAlphabet(s)) {
         throw std::runtime_error("Transition stack-push symbol '" + s.toString() + "' is not in the stack alphabet");
       }
+    }
+  }
+}
+
+/**
+ * @brief Imprime información detallada sobre la definición del PDA
+ * 
+ * Muestra la información básica del autómata incluyendo modo de aceptación,
+ * estados, alfabetos y opcionalmente las transiciones si trace está activado.
+ * 
+ * @param trace Si es true, muestra también todas las transiciones
+ * @param filename Nombre del archivo de donde se cargó el PDA (opcional)
+ */
+void PDA::printPDADefinition(bool trace, const std::string& filename) const {
+  if (!filename.empty()) {
+    std::cout << "\nSuccessfully parsed PDA from file: " << filename << std::endl;
+  }
+
+  // Mostrar información básica sobre el PDA analizado
+  std::cout << "=== PDA Information ===" << std::endl;
+  std::cout << "Acceptance Mode: " << (mode_ == AcceptanceMode::FinalState ? "Final State" : "Empty Stack")
+            << std::endl;
+
+  std::cout << "States: {";
+  bool first = true;
+  for (const auto &state : states_) {
+    if (!first) std::cout << ", ";
+    std::cout << state.GetId();
+    first = false;
+  }
+  std::cout << "}" << std::endl;
+
+  std::cout << "Initial State: " << initialState_.getValue() << std::endl;
+  std::cout << "Initial Stack Symbol: " << initialStackSymbol_.getValue() << std::endl;
+
+  std::cout << "Final States: {";
+  first = true;
+  for (const auto &state : finals_) {
+    if (!first) std::cout << ", ";
+    std::cout << state.GetId();
+    first = false;
+  }
+  std::cout << "}" << std::endl;
+
+  std::cout << "Input Alphabet: {";
+  first = true;
+  for (const auto &symbol : chainAlphabet_.GetAlphabet()) {
+    if (!first) std::cout << ", ";
+    std::cout << symbol.getValue();
+    first = false;
+  }
+  std::cout << "}" << std::endl;
+
+  std::cout << "Stack Alphabet: {";
+  first = true;
+  for (const auto &symbol : stackAlphabet_.GetAlphabet()) {
+    if (!first) std::cout << ", ";
+    std::cout << symbol.getValue();
+    first = false;
+  }
+  std::cout << "}" << std::endl;
+
+  std::cout << "Transitions: " << transitions_.size() << std::endl;
+
+  if (trace) {
+    std::cout << "\n=== Transitions ===" << std::endl;
+    for (const auto &transition : transitions_) {
+      std::cout << "(" << transition.getFromState().GetId() << ", " << transition.getInputSymbol().getValue() << ", "
+            << transition.getStackPopSymbol().getValue() << ") -> (" << transition.getToState().GetId() << ", ";
+
+      if (transition.getStackPushSymbols().empty()) {
+        std::cout << ".";
+      } else {
+        for (const auto &symbol : transition.getStackPushSymbols()) {
+          std::cout << symbol.getValue();
+        }
+      }
+      std::cout << ")" << std::endl;
     }
   }
 }

@@ -5,46 +5,6 @@
 #include "../include/Parser.hpp"
 #include "../include/TraceLogger.hpp"
 
-void printPDAStatus(const PDA &pda, bool trace, std::string filename) {
-  std::cout << "\nSuccessfully parsed PDA from file: " << filename << std::endl;
-
-  // Mostrar información básica sobre el PDA analizado
-  std::cout << "=== PDA Information ===" << std::endl;
-  std::cout << "Acceptance Mode: " << (pda.acceptanceMode() == AcceptanceMode::FinalState ? "Final State" : "Empty Stack")
-            << std::endl;
-
-  std::cout << "States: " << pda.states().size() << std::endl;
-  std::cout << "Initial State: " << pda.initialState().getValue() << std::endl;
-  std::cout << "Initial Stack Symbol: " << pda.initialStackSymbol().getValue() << std::endl;
-
-  std::cout << "Final States: ";
-  for (const auto &state : pda.finalStates()) {
-    std::cout << state.GetId() << " ";
-  }
-  std::cout << std::endl;
-
-  std::cout << "Input Alphabet Size: " << pda.chainAlphabet().GetSize() << std::endl;
-  std::cout << "Stack Alphabet Size: " << pda.stackAlphabet().GetSize() << std::endl;
-  std::cout << "Transitions: " << pda.transitions().size() << std::endl;
-
-  if (trace) {
-    std::cout << "\n=== Transitions ===" << std::endl;
-    for (const auto &transition : pda.transitions()) {
-  std::cout << "(" << transition.getFromState().GetId() << ", " << transition.getInputSymbol().getValue() << ", "
-        << transition.getStackPopSymbol().getValue() << ") -> (" << transition.getToState().GetId() << ", ";
-
-      if (transition.getStackPushSymbols().empty()) {
-        std::cout << ".";
-      } else {
-        for (const auto &symbol : transition.getStackPushSymbols()) {
-          std::cout << symbol.getValue();
-        }
-      }
-      std::cout << ")" << std::endl;
-    }
-  }
-}
-
 int main(int argc, char **argv) {
   std::cout << "PDA Simulator\n";
 
@@ -60,7 +20,7 @@ int main(int argc, char **argv) {
   std::string mode = "APf"; // Modo por defecto y único implementado
 
   // Analizar Flag opcional para trazado
-  if (argc == 4 && argv[3] == "--trace") {
+  if (argc == 4 && std::string(argv[3]) == "--trace") {
     trace = true;
   }
 
@@ -69,7 +29,7 @@ int main(int argc, char **argv) {
     Parser parser;
     PDA pda = parser.parsePDAFromFile(filename);
     std::vector<std::string> inputs = parser.parseInputFromFile(inputsFile);
-    //printPDAStatus(pda, trace, filename);
+    pda.printPDADefinition(trace, filename);
 
     pda.validatePDA();
 

@@ -50,6 +50,9 @@ public:
   void setMaxIterations(int maxIter);
   int maxIterations() const noexcept;
 
+  // Imprime información detallada sobre la definición del PDA
+  void printPDADefinition(bool trace = false, const std::string& filename = "") const;
+
 private:
   AcceptanceMode mode_{AcceptanceMode::FinalState};
   std::set<State> states_{}; // Q
